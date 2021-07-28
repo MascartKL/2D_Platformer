@@ -14,10 +14,36 @@ public class Player : MonoBehaviour
     private float checkRadius = 0.3f;
     public LayerMask whatisGround;
     public Joystick joystick;
-    
+
+    public Transform attackPos;
+    public float attackDamage;
+    public float attackRange;
+    public LayerMask damageableLayer;
+
+
     void Start()
     {
         rigibody = GetComponent<Rigidbody2D>();
+    }
+
+    private void Attack()
+    {
+        Debug.Log("attack");
+        Collider2D[] enemies = Physics2D.OverlapCircleAll(attackPos.position, attackRange, damageableLayer);
+
+        if(enemies.Length != 0)
+        {
+            for(int i=0; i < enemies.Length; i++)
+            {
+                enemies[i].GetComponent<DamageableObj>().TakeDamage(attackDamage);
+            }
+        }
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(attackPos.position, attackRange);
     }
 
     private void FixedUpdate()
@@ -39,6 +65,8 @@ public class Player : MonoBehaviour
         {
             Flip();
         }
+
+
     }
 
     private void Update()
@@ -50,6 +78,11 @@ public class Player : MonoBehaviour
             rigibody.velocity = Vector2.up * jumpForce;
         }
 #endif
+
+        if (Input.GetButtonDown("Fire1"))
+        {
+            Attack();
+        }
     }
     
 
