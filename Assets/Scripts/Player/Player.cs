@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
-    Rigidbody2D rigibody;
+    Rigidbody2D rigidbody;
+    static private float hpPlayer = 100;
     private float speed = 4;
     private float jumpForce = 10;
     private float moveInput;
@@ -20,10 +22,14 @@ public class Player : MonoBehaviour
     public float attackRange;
     public LayerMask damageableLayer;
 
+    public Image hpBarPlayer;
+    public Image hpBarPlayerEffect;
+    private float hpSpeed = 0.002f;
 
     void Start()
     {
-        rigibody = GetComponent<Rigidbody2D>();
+        rigidbody = GetComponent<Rigidbody2D>();
+        rigidbody.freezeRotation = true;
     }
 
     private void Attack()
@@ -31,13 +37,20 @@ public class Player : MonoBehaviour
         Debug.Log("attack");
         Collider2D[] enemies = Physics2D.OverlapCircleAll(attackPos.position, attackRange, damageableLayer);
 
-        if(enemies.Length != 0)
+        if (enemies.Length != 0)
         {
-            for(int i=0; i < enemies.Length; i++)
+            for (int i = 0; i < enemies.Length; i++)
             {
                 enemies[i].GetComponent<DamageableObj>().TakeDamage(attackDamage);
             }
         }
+    }
+   
+    public void PlayerDamaged(float damage)
+    {
+        hpPlayer -= damage;
+        hpBarPlayer.fillAmount = hpPlayer * 0.01f;
+        Debug.Log(hpPlayer);
     }
 
     private void OnDrawGizmosSelected()
@@ -56,7 +69,7 @@ public class Player : MonoBehaviour
         moveInput = joystick.Horizontal;
 #endif
 
-        rigibody.velocity = new Vector2(moveInput * speed, rigibody.velocity.y);
+        rigidbody.velocity = new Vector2(moveInput * speed, rigidbody.velocity.y);
 
         if (isFacingRight == false && moveInput > 0)
         {
@@ -75,7 +88,7 @@ public class Player : MonoBehaviour
 #if UNITY_EDITOR_WIN
         if (isGrounded == true && Input.GetKeyDown(KeyCode.Space))
         {
-            rigibody.velocity = Vector2.up * jumpForce;
+            rigidbody.velocity = Vector2.up * jumpForce;
         }
 #endif
 
@@ -83,6 +96,11 @@ public class Player : MonoBehaviour
         {
             Attack();
         }
+
+        if (hpBarPlayer.fillAmount < hpBarPlayerEffect.fillAmount)
+            hpBarPlayerEffect.fillAmount -= hpSpeed;
+        else
+            hpBarPlayerEffect.fillAmount = hpBarPlayer.fillAmount;
     }
     
 
@@ -95,6 +113,8 @@ public class Player : MonoBehaviour
         }
 #endif
     }
+
+   
 
     private void Flip()
     {

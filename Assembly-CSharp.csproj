@@ -61,8 +61,9 @@
     <Compile Include="Assets\Scripts\Player\Player.cs" />
     <Compile Include="Assets\Joystick Pack\Scripts\Joysticks\FloatingJoystick.cs" />
     <Compile Include="Assets\Joystick Pack\Examples\JoystickPlayerExample.cs" />
-    <Compile Include="Assets\Scripts\UI\ShowController.cs" />
     <Compile Include="Assets\Scripts\Monsters\DamageableObj.cs" />
+    <Compile Include="Assets\Scripts\UI\ShowController.cs" />
+    <Compile Include="Assets\Scripts\Monsters\Spike.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
