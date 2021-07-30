@@ -5,31 +5,39 @@ using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
-    Rigidbody2D rigidbody;
-    static private float hpPlayer = 100;
-    private float speed = 4;
-    private float jumpForce = 10;
+    Rigidbody2D _rigidbody;
     private float moveInput;
     private bool isFacingRight = true;
     private bool isGrounded;
     public Transform feetPos;
-    private float checkRadius = 0.3f;
+    private float checkRadius = 0.3f; // радиус для проверки isGround
     public LayerMask whatisGround;
     public Joystick joystick;
 
+    [Header("Main Settings")]
+    [SerializeField]
+    private float speed = 4;
+    [SerializeField]
+    private float jumpForce = 10;
+    [SerializeField]
+    private float hpPlayer = 100;
+
+    [Header("Attack Settings")]
     public Transform attackPos;
     public float attackDamage;
     public float attackRange;
     public LayerMask damageableLayer;
 
+    [Header("Hp Bar Settings")]
     public Image hpBarPlayer;
     public Image hpBarPlayerEffect;
     private float hpSpeed = 0.002f;
 
     void Start()
     {
-        rigidbody = GetComponent<Rigidbody2D>();
-        rigidbody.freezeRotation = true;
+        _rigidbody = GetComponent<Rigidbody2D>();
+        _rigidbody.freezeRotation = true;
+        
     }
 
     private void Attack()
@@ -55,7 +63,7 @@ public class Player : MonoBehaviour
 
     private void OnDrawGizmosSelected()
     {
-        Gizmos.color = Color.red;
+        Gizmos.color = Color.red;  //отрисовка радиуса атаки 
         Gizmos.DrawWireSphere(attackPos.position, attackRange);
     }
 
@@ -69,7 +77,7 @@ public class Player : MonoBehaviour
         moveInput = joystick.Horizontal;
 #endif
 
-        rigidbody.velocity = new Vector2(moveInput * speed, rigidbody.velocity.y);
+        _rigidbody.velocity = new Vector2(moveInput * speed, _rigidbody.velocity.y);
 
         if (isFacingRight == false && moveInput > 0)
         {
@@ -78,8 +86,6 @@ public class Player : MonoBehaviour
         {
             Flip();
         }
-
-
     }
 
     private void Update()
@@ -88,7 +94,7 @@ public class Player : MonoBehaviour
 #if UNITY_EDITOR_WIN
         if (isGrounded == true && Input.GetKeyDown(KeyCode.Space))
         {
-            rigidbody.velocity = Vector2.up * jumpForce;
+            _rigidbody.velocity = Vector2.up * jumpForce;
         }
 #endif
 
@@ -103,19 +109,17 @@ public class Player : MonoBehaviour
             hpBarPlayerEffect.fillAmount = hpBarPlayer.fillAmount;
     }
     
-
     public void OnJumpButtonDown()
     {
 #if UNITY_ANDROID
         if (isGrounded == true)
         {
-            rigibody.velocity = Vector2.up * jumpForce;
+            _rigidbody.velocity = Vector2.up * jumpForce;
         }
 #endif
     }
 
-   
-
+  
     private void Flip()
     {
         isFacingRight = !isFacingRight;
