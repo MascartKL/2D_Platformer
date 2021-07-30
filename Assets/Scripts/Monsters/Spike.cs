@@ -16,9 +16,10 @@ public class Spike : MonoBehaviour
             isSpikeDamaged = true;
             player.GetComponent<Player>().PlayerDamaged(spikeDamage);
             isSpikeDamaged = true;
-            Invoke("CdSpike", 2f);
+            Invoke(nameof(CdSpike), 2f);
             Debug.Log("true");
         }
+
     }
 
     private void CdSpike()

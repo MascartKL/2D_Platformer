@@ -21,6 +21,8 @@ public class Player : MonoBehaviour
     private float jumpForce = 10;
     [SerializeField]
     private float hpPlayer = 100;
+    [SerializeField]
+    private float maxhpPlayer = 100;
 
     [Header("Attack Settings")]
     public Transform attackPos;
@@ -96,11 +98,19 @@ public class Player : MonoBehaviour
         {
             _rigidbody.velocity = Vector2.up * jumpForce;
         }
-#endif
+
 
         if (Input.GetButtonDown("Fire1"))
         {
             Attack();
+        }
+#endif
+
+        if(Input.GetKeyDown(KeyCode.J))
+        {
+            if(hpPlayer < maxhpPlayer)
+            hpPlayer += 10;
+            hpBarPlayer.fillAmount = hpPlayer * 0.01f;
         }
 
         if (hpBarPlayer.fillAmount < hpBarPlayerEffect.fillAmount)
@@ -119,7 +129,20 @@ public class Player : MonoBehaviour
 #endif
     }
 
-  
+    public void OnAttackButtonDown()
+    {
+#if UNITY_ANDROID
+        Attack();
+#endif
+    }
+
+    public void OnHealButtonDown()
+    {
+        hpPlayer += 10;
+        hpBarPlayer.fillAmount = hpPlayer * 0.01f;
+
+    }
+
     private void Flip()
     {
         isFacingRight = !isFacingRight;
