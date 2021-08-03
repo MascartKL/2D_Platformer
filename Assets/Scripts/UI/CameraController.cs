@@ -7,10 +7,10 @@ public class CameraController : MonoBehaviour
     [SerializeField] Transform player;
     private Vector3 pos;
 
-    [SerializeField]
-    float leftLimit;
-    [SerializeField]
-    float rightLimit;
+    //[SerializeField]
+   public  static float leftLimit;
+   // [SerializeField]
+   public  static float rightLimit;
     [SerializeField]
     float downLimit;
     [SerializeField]
@@ -26,7 +26,6 @@ public class CameraController : MonoBehaviour
         pos = player.position;
         pos.z = -10f;
         pos.y = 0;
-       
         transform.position = Vector3.Lerp(transform.position, pos, Time.deltaTime * 10);
 
         //////////////////////////
