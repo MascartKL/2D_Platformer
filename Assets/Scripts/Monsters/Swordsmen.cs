@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.Events;
 
 public class Swordsmen : DamageableObj
 {
@@ -24,12 +26,19 @@ public class Swordsmen : DamageableObj
     private bool isLeftScale;
     [SerializeField] private Canvas mobCanvas; //для флипа полоски хп при повороте
 
+
+    
+
+    //
+
     [Header("Distances")]
     [SerializeField]
     private float rangeAgro = 10f;
     [SerializeField]
     private float rangeRage = 5f;
     private float distToPlayer;
+
+    private float playerY;
 
 
     void Start()
@@ -38,7 +47,8 @@ public class Swordsmen : DamageableObj
         anim = GetComponent<Animator>();
         mobTran = gameObject.transform;
         MobFlip();
-        isLeftScale = true;       
+        isLeftScale = true;
+        player = GameObject.FindGameObjectWithTag("Player");
     } 
 
 
@@ -47,17 +57,24 @@ public class Swordsmen : DamageableObj
     {
         playerTran = FindObjectOfType<Player>().transform;
         mobTran = gameObject.transform;
+        playerY = playerTran.position.y;
         transform.position = new Vector2(transform.position.x, Mathf.Clamp(mobTran.position.y, groundLevel, groundLevel));
         distToPlayer = Vector2.Distance(playerTran.position, mobTran.position);
 
         // ограничение движения по Y, сделанно чтобы при включенном тригере в бокс коллайдере моб никуда не уходил, 
         //и при движении к игроку во время прыжка не ултал вверх
         //trigger в box collider поставлен чтобы можно было проходить через мобов, делать рывок, и чтобы они не толпились в очередь на сцене
-
-        if (distToPlayer < rangeAgro)// && Vector2.Distance(playerTran.position, mobTran.position) > 2f)
+        if (Mathf.Abs(mobTran.position.y - playerTran.position.y) < 0.3f) // чтобы моб не агрился на игрока, когда тот находится 
+        {                                                                 // более высокой или низкой платформе
+            if (distToPlayer < rangeAgro)// && Vector2.Distance(playerTran.position, mobTran.position) > 2f)
+            {
+                Persuit();
+            }
+        }
+        else
         {
-            Persuit();
-        }              
+            rb.velocity = new Vector2(0, 0);
+        }
     }
 
     void Persuit()
@@ -122,9 +139,7 @@ public class Swordsmen : DamageableObj
         isAttack = true;
         Invoke("SwordAttack", 0.85f);
         Invoke("StopAttack", 1f);
-        Invoke("CdAttack", 5f);
-
-        
+        Invoke("CdAttack", 5f);   
     }
 
     private void OnDrawGizmosSelected()
@@ -149,6 +164,7 @@ public class Swordsmen : DamageableObj
         if (Physics2D.OverlapCircle(attackPos.position, attackRange, playerLayer) == true)
         {
             player.GetComponent<Player>().PlayerDamaged(mobDamage);
+            //hitEvent.Invoke(mobDamage);
         }
     }
 
@@ -162,4 +178,7 @@ public class Swordsmen : DamageableObj
         CanvasScaler *= -1;
         mobCanvas.transform.localScale = CanvasScaler;
     }
+
+    
 }
+

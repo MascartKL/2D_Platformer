@@ -11,11 +11,18 @@ public class DamageableObj : MonoBehaviour
 
     private float hpSpeed = 0.002f;
 
+    [Header("Resistance")]
+    [SerializeField] public float physRes;
+
+    public delegate void DeathDelegate(GameObject go);
+
+    public static event DeathDelegate Death;
+
     public void TakeDamage(float damage)
     {
-        hp -= damage;
+        hp -= (damage - damage*(physRes/100));
 
-        hpBar.fillAmount = hp * 0.1f;
+        hpBar.fillAmount = hp * 0.01f;
         
 
         Debug.Log(hp);
@@ -24,6 +31,7 @@ public class DamageableObj : MonoBehaviour
         {
             Destroy(gameObject);
             Debug.Log("death");
+            Death(this.gameObject);
         }
     }
 
