@@ -51,7 +51,11 @@ public class Player : MonoBehaviour
         {
             for (int i = 0; i < enemies.Length; i++)
             {
-                enemies[i].GetComponent<DamageableObj>().TakeDamage(attackDamage);
+                if(Random.Range(1,2) == 2)
+				{
+                    enemies[i].GetComponent<DamageableObj>().TakeDamage(attackDamage*2, true);
+                }
+                enemies[i].GetComponent<DamageableObj>().TakeDamage(attackDamage, false);
             }
         }
     }
