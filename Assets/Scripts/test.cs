@@ -5,10 +5,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System.IO;
-//using Newtonsoft.Json;
+using Newtonsoft.Json;
 
 
 using System.Runtime.Serialization.Formatters.Binary;
+using Assets.Scripts.UI;
 
 public class test : MonoBehaviour
 {
@@ -118,16 +119,25 @@ public class test : MonoBehaviour
 
     public void Save()
     {
-        BinaryFormatter bf = new BinaryFormatter();
-        FileStream fs = new FileStream(filepath, FileMode.Create);
+        //BinaryFormatter bf = new BinaryFormatter();
+        //FileStream fs = new FileStream(filepath, FileMode.Create);
+        
+        //Item itemSave = new Item();
 
-        // Item itemSave = new Item();
+        //itemSave = itemsSword[0];
 
-        itemSave = itemsSword[0];
+        var note = JsonConvert.SerializeObject(itemsSword);
+        Service service = new Service();
 
-        bf.Serialize(fs, itemSave);
+        service.writeTofile(note);
 
-        fs.Close();
+
+        var check = JsonConvert.DeserializeObject<List<Item>>(note);
+
+        //bf.Serialize(fs, itemSave);
+
+        //fs.Close();
+      
     }
 
     public void Load()
@@ -352,7 +362,8 @@ public class test : MonoBehaviour
 
     public string SaveJson(Item it)
     {
-        return JsonUtility.ToJson(itemsSword);
+        Debug.Log(JsonConvert.SerializeObject(it));
+        return JsonConvert.SerializeObject(it);
     }
     public void LoadJson(string json)
     {
@@ -513,6 +524,7 @@ public struct Item
     }
 
 }
+
 
 /*[System.Serializable]
 public struct ItemList
