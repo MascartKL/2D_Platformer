@@ -1,9 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class LevelController : MonoBehaviour
 {                                                       //  не доделано
+    public delegate void LevelEnDelegate(int level);
+
+    public static event LevelEnDelegate LevelEnd;
+
     private GameObject player;
     [SerializeField] private int arenaMax;
     [SerializeField] private int[] numMobOfWave;
@@ -111,6 +116,8 @@ public class LevelController : MonoBehaviour
 
     void Start()
     {
+        
+       
         CameraController.leftLimit = leftEdge.transform.position.x + 5f;
         CameraController.rightLimit = rightEdge.transform.position.x;
 
@@ -130,6 +137,11 @@ public class LevelController : MonoBehaviour
 
     void Update()
     {
+
+        if (Input.GetButtonDown("Fire1"))
+        {
+            LevelEnd(1);
+        }
         player = GameObject.FindWithTag("Player");
 
         if (isProgressStage[0] == "not started" && isProgressStage[1] == "not started" && isProgressStage[2]  == "not started" && isProgressStage[3] == "not started")

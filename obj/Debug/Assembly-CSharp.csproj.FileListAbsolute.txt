@@ -335,3 +335,6 @@ B:\Repo_g\2dplatform\obj\Debug\Assembly-CSharp.csproj.CoreCompileInputs.cache
 B:\Repo_g\2dplatform\obj\Debug\Assembly-CSharp.csproj.CopyComplete
 B:\Repo_g\2dplatform\obj\Debug\Assembly-CSharp.dll
 B:\Repo_g\2dplatform\obj\Debug\Assembly-CSharp.pdb
+B:\Repo_g\2dplatform\Temp\Bin\Debug\Newtonsoft.Json.dll
+B:\Repo_g\2dplatform\Temp\Bin\Debug\Newtonsoft.Json.xml
+B:\Repo_g\2dplatform\Temp\Bin\Debug\Newtonsoft.Json.pdb
