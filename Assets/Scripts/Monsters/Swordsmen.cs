@@ -1,35 +1,19 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.Events;
 
-public class Swordsmen : DamageableObj
+
+public class Swordsmen : Mob
 {
-    private Transform playerTran;
-    private Transform mobTran;
-    private Animator anim;
-    private Rigidbody2D rb;
-    private float speed = 1.5f;
 
     private bool isAttack;
     private bool isCdAttack = false;
-    private bool isHit;
+
 
     [SerializeField] Transform attackPos;
     [SerializeField] private float attackRange = 3f;
-    [SerializeField] LayerMask playerLayer;
-    public GameObject player;
     [SerializeField] private float mobDamage;
 
     [SerializeField] private float groundLevel = 1.3f; //настраивается для каждого моба на сцене отдельно
-    private bool isLeftScale;
     [SerializeField] private Canvas mobCanvas; //для флипа полоски хп при повороте
-
-
-    
-
-    //
 
     [Header("Distances")]
     [SerializeField]
@@ -38,14 +22,11 @@ public class Swordsmen : DamageableObj
     private float rangeRage = 5f;
     private float distToPlayer;
 
-    private float playerY;
-
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
-        mobTran = gameObject.transform;
         MobFlip();
         isLeftScale = true;
         player = GameObject.FindGameObjectWithTag("Player");
@@ -53,20 +34,14 @@ public class Swordsmen : DamageableObj
 
 
     
-    void FixedUpdate()
+    void Update()
     {
-        playerTran = FindObjectOfType<Player>().transform;
-        mobTran = gameObject.transform;
-        playerY = playerTran.position.y;
-        transform.position = new Vector2(transform.position.x, Mathf.Clamp(mobTran.position.y, groundLevel, groundLevel));
-        distToPlayer = Vector2.Distance(playerTran.position, mobTran.position);
+        transform.position = new Vector2(transform.position.x, Mathf.Clamp(gameObject.transform.position.y, groundLevel, groundLevel));
+        distToPlayer = Vector2.Distance(player.transform.position, gameObject.transform.position);
 
-        // ограничение движения по Y, сделанно чтобы при включенном тригере в бокс коллайдере моб никуда не уходил, 
-        //и при движении к игроку во время прыжка не ултал вверх
-        //trigger в box collider поставлен чтобы можно было проходить через мобов, делать рывок, и чтобы они не толпились в очередь на сцене
-        if (Mathf.Abs(mobTran.position.y - playerTran.position.y) < 0.3f) // чтобы моб не агрился на игрока, когда тот находится 
-        {                                                                 // более высокой или низкой платформе
-            if (distToPlayer < rangeAgro)// && Vector2.Distance(playerTran.position, mobTran.position) > 2f)
+        if (Mathf.Abs(gameObject.transform.position.y - player.transform.position.y) < 0.3f)
+        { 
+            if (distToPlayer < rangeAgro)
             {
                 Persuit();
             }
@@ -77,63 +52,63 @@ public class Swordsmen : DamageableObj
         }
     }
 
-    void Persuit()
-    {
-        if (playerTran.position.x > mobTran.position.x && isLeftScale == true)
-        {
-            MobFlip();
-            isLeftScale = false;
-        }
-        else if (playerTran.position.x < mobTran.position.x && isLeftScale == false)
-        {
-            MobFlip();
-            isLeftScale = true;
-        }
+	protected override void Persuit()
+	{
+		if (player.transform.position.x > gameObject.transform.position.x && isLeftScale == true)
+		{
+			MobFlip();
+			isLeftScale = false;
+		}
+		else if (player.transform.position.x < gameObject.transform.position.x && isLeftScale == false)
+		{
+			MobFlip();
+			isLeftScale = true;
+		}
 
 
 
-        if (distToPlayer < rangeAgro)
-        {
-            if ((mobTran.position.x > playerTran.position.x && speed > 0) || (mobTran.position.x < playerTran.position.x && speed < 0))
-            {
-                speed *= -1; //в какую сторону идти
-            }
+		if (distToPlayer < rangeAgro)
+		{
+			if ((gameObject.transform.position.x > player.transform.position.x && speed > 0) || (gameObject.transform.position.x < player.transform.position.x && speed < 0))
+			{
+				speed *= -1; //в какую сторону идти
+			}
 
 
 
-            if (distToPlayer > 2f && isAttack == false)
-            {               
-                if (distToPlayer < rangeRage)
-                {
-                    rb.velocity = new Vector2(speed * 1.5f, 0);
-                }
-                else
-                {
-                    rb.velocity = new Vector2(speed, 0);
-                }
-            }
-            else
-            {
-                rb.velocity = new Vector2(0, 0);
+			if (distToPlayer > 2f && isAttack == false)
+			{
+				if (distToPlayer < rangeRage)
+				{
+					rb.velocity = new Vector2(speed * 1.5f, 0);
+				}
+				else
+				{
+					rb.velocity = new Vector2(speed, 0);
+				}
+			}
+			else
+			{
+				rb.velocity = new Vector2(0, 0);
 
-                if (isAttack == false)
-                {
-                    SwordsMenAttack();
-                }
-            }
+				if (isAttack == false)
+				{
+					SwordsMenAttack();
+				}
+			}
 
-            if (isCdAttack == true && distToPlayer < 5f)
-            {
-                rb.velocity = new Vector2(speed * -0.2f, 0);
-            }
-        }
-        else 
-        { 
-            rb.velocity = new Vector2(0, 0);
-        }
-    }
+			if (isCdAttack == true && distToPlayer < 5f)
+			{
+				rb.velocity = new Vector2(speed * -0.2f, 0);
+			}
+		}
+		else
+		{
+			rb.velocity = new Vector2(0, 0);
+		}
+	}
 
-    void SwordsMenAttack()
+	void SwordsMenAttack()
     {
         anim.SetBool("isAttack", true);
         isAttack = true;

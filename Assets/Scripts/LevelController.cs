@@ -112,7 +112,7 @@ public class LevelController : MonoBehaviour
     void Start()
     {
         arenaNumber = 0;
-        DamageableObj.Death += Death;
+        Mob.Death += Death;
     }
 
     void Death(GameObject go)
