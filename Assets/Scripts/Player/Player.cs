@@ -25,6 +25,7 @@ public class Player : MonoBehaviour
     private float maxhpPlayer = 100;
 
     [Header("Attack Settings")]
+    static public int baseDamage = 1000;
     public Transform attackPos;
     public float attackDamage;
     public float attackRange;
