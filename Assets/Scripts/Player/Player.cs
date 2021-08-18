@@ -23,6 +23,10 @@ public class Player : MonoBehaviour
     private float hpPlayer = 100;
     [SerializeField]
     private float maxhpPlayer = 100;
+    static public int fireRes = 0;
+    static public int coldRes = 0;
+    static public int procDef = 0;
+    static public int procHealth = 0;
 
     [Header("Attack Settings")]
     static public int baseDamage = 1000;
@@ -30,8 +34,13 @@ public class Player : MonoBehaviour
     public float attackDamage;
     public float attackRange;
     public LayerMask damageableLayer;
+    static public int coldDamage = 0;
+    static public int fireDamage = 0;
+    static public int procPhysDamage = 0;
 
     [Header("Hp Bar Settings")]
+    static public int health;
+    static public int defence = 1000;
     public Image hpBarPlayer;
     public Image hpBarPlayerEffect;
     private float hpSpeed = 0.002f;
