@@ -19,18 +19,27 @@ namespace Assets.Scripts.Monsters
 			player = GameObject.FindGameObjectWithTag("Player");
 		}
 
-		void Update()
+		protected override void Update()
 		{
-			HpBarChange();
+			base.Update();
+			if (isStan)
+				return;
+			
 
+			Сonduct();
+		}
+
+		protected override void Сonduct()
+		{
 			distanceToPlayer = Vector2.Distance(gameObject.transform.position, player.transform.position);
 			if (distanceToPlayer < distanceAgro)
 			{
 				if (distanceToPlayer < distanceAttack)
 				{
-					if(isAttack)
-					Attack();
-					if(hp < 50 && isDefense)
+					if (isAttack)
+						Attack();
+
+					if (hp < 50 && isDefense)
 					{
 						Defense();
 					}
@@ -44,14 +53,12 @@ namespace Assets.Scripts.Monsters
 			{
 				rb.velocity = new Vector2(0, 0);
 			}
-
-
 		}
 
 		protected override void Attack()
 		{
+			_isAttack = true;
 			base.Attack();
-			rb.velocity = new Vector2(0, 0);
 			StartAttack();
 			isAttack = false;
 		}
@@ -80,6 +87,7 @@ namespace Assets.Scripts.Monsters
 		void Reload()
 		{
 			isAttack = true;
+			_isAttack = false;
 		}
 
 		void Defense()
@@ -102,11 +110,10 @@ namespace Assets.Scripts.Monsters
 
 		void StartAttack()
 		{
-			if(Physics2D.OverlapCircle(transform.position,distanceAttack, playerLayer))
-			{
-				player.GetComponent<Player>().PlayerDamaged(damage);
-			}
-
+				if (Physics2D.OverlapCircle(transform.position, distanceAttack, playerLayer))
+				{
+					player.GetComponent<Player>().PlayerDamaged(damage);
+				}
 			Invoke("Reload", 2);
 		}
 	}

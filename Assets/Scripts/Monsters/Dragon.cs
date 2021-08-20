@@ -26,26 +26,10 @@ namespace Assets.Scripts.Monsters
 			player = GameObject.FindGameObjectWithTag("Player");
 		}
 
-		void Update()
+		protected override void Update()
 		{
-			HpBarChange();
-
-			distanceToPlayer = Vector2.Distance(gameObject.transform.position, player.transform.position);
-			if (distanceToPlayer < distanceAgro)
-			{
-				if (distanceToPlayer < distanceAttack)
-				{
-					Attack();
-				}
-				else
-				{
-					Persuit();
-				}
-			}
-			else
-			{
-				rb.Sleep();
-			}
+			base.Update();
+			base.Сonduct();
 		}
 
 		protected override void Persuit()
@@ -72,7 +56,6 @@ namespace Assets.Scripts.Monsters
 
 			if (!activFireball && !isFatigue)
 			{
-				//anim.SetBool("isAttack", true);
 				activFireball = true;
 				Invoke("StartAttack", reloadFireball);
 			}
@@ -89,7 +72,6 @@ namespace Assets.Scripts.Monsters
 
 		void Reload()
 		{
-			//anim.SetBool("isAttack", false);
 			activFireball = false;
 		}
 

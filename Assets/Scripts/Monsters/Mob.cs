@@ -9,6 +9,11 @@ public class Mob : MonoBehaviour
 	[SerializeField] protected float speed;
 	[SerializeField] protected float distanceAgro;
 	[SerializeField] protected float distanceAttack;
+	[SerializeField] protected float timeStan;
+    private int periodStan = 0;
+    private int countDamage = 0;
+    public bool isStan;
+    public bool _isAttack;
 
 	//Mob components
 	protected Rigidbody2D rb;
@@ -43,6 +48,8 @@ public class Mob : MonoBehaviour
 
         RandomGenerationDamageValue(damage.ToString(), creat);
 
+        Stan();
+
         if (hp <= 0)
         {
             Destroy(gameObject);
@@ -50,7 +57,12 @@ public class Mob : MonoBehaviour
         }
     }
 
-    protected void HpBarChange()
+    protected virtual void Update()
+	{
+        HpBarChange();
+    }
+
+    private void HpBarChange()
 	{
         if (hpBar.fillAmount < hpBarEffect.fillAmount)
             hpBarEffect.fillAmount -= hpSpeed;
@@ -71,6 +83,8 @@ public class Mob : MonoBehaviour
 
     protected virtual void Attack()
 	{
+        rb.velocity = new Vector2(0, 0);
+        _isAttack = true;
         AttackFlip();
 	}
 
@@ -83,6 +97,26 @@ public class Mob : MonoBehaviour
         Vector3 CanvasScaler = canvas.transform.localScale;
         CanvasScaler.x *= -1;
         canvas.transform.localScale = CanvasScaler;
+    }
+
+    protected virtual void Ñonduct()
+    {
+        distanceToPlayer = Vector2.Distance(gameObject.transform.position, player.transform.position);
+        if (distanceToPlayer < distanceAgro)
+        {
+            if (distanceToPlayer < distanceAttack)
+            {
+                Attack();
+            }
+            else
+            {
+                Persuit();
+            }
+        }
+        else
+        {
+            rb.velocity = new Vector2(0, 0);
+        }
     }
 
     private void AttackFlip()
@@ -104,8 +138,7 @@ public class Mob : MonoBehaviour
 	{
         if (!valueDamage.IsActive())
             valueDamage.enabled = true;
-
-        
+    
         if (!creat)
 		{
             valueDamage.text = damage.ToString();
@@ -125,12 +158,32 @@ public class Mob : MonoBehaviour
             valueDamage.fontSize += 6;
         }
 
-        Invoke("disableText", 1f);
+        Invoke("DisableText", 1f);
     }
 
-    private void disableText()
+    private void DisableText()
 	{
         if (valueDamage.IsActive())
             valueDamage.enabled = false;
+    }
+
+    private void Stan()
+	{
+       if(countDamage++ >= periodStan)
+	   {
+            if (_isAttack)
+            {
+                Debug.Log("Stan");
+                isStan = true;
+                Invoke("_ResetStan", timeStan);
+            }
+            periodStan = 5;
+            countDamage = 0;
+       }
+    }
+
+	private void _ResetStan()
+	{
+        isStan = false;
     }
 }

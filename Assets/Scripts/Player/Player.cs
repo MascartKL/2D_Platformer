@@ -13,19 +13,19 @@ public class Player : MonoBehaviour
     private float checkRadius = 0.3f; // радиус для проверки isGround
     public LayerMask whatisGround;
     public Joystick joystick;
+    private bool isInvulnerability;
 
     [Header("Main Settings")]
-    [SerializeField]
-    private float speed = 4;
     [SerializeField]
     private float jumpForce = 10;
     [SerializeField]
     private float hpPlayer = 100;
     [SerializeField]
     private float maxhpPlayer = 100;
+    [SerializeField]
+    private float speed = 4;
 
     [Header("Attack Settings")]
-    static public int baseDamage = 1000;
     public Transform attackPos;
     public float attackDamage;
     public float attackRange;
@@ -39,8 +39,7 @@ public class Player : MonoBehaviour
     void Start()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
-        _rigidbody.freezeRotation = true;
-        
+        _rigidbody.freezeRotation = true;     
     }
 
     private void Attack()
@@ -52,20 +51,35 @@ public class Player : MonoBehaviour
         {
             for (int i = 0; i < enemies.Length; i++)
             {
-                if(Random.Range(1,2) == 2)
-				{
-                    enemies[i].GetComponent<DamageableObj>().TakeDamage(attackDamage*2, true);
+                if(Random.Range(1,3) == 2)
+				{      
+                    enemies[i].GetComponent<Mob>().TakeDamage(attackDamage*2, true);
                 }
-                enemies[i].GetComponent<DamageableObj>().TakeDamage(attackDamage, false);
+				else
+				{
+                    enemies[i].GetComponent<Mob>().TakeDamage(attackDamage, false);
+                }
             }
         }
     }
    
     public void PlayerDamaged(float damage)
     {
-        hpPlayer -= damage;
-        hpBarPlayer.fillAmount = hpPlayer * 0.01f;
-        Debug.Log(hpPlayer);
+        if(!isInvulnerability)
+		{
+            hpPlayer -= damage;
+            hpBarPlayer.fillAmount = hpPlayer * 0.01f;
+
+            isInvulnerability = true;
+            Invoke("Invulnerability", 0.3f);
+
+           // Debug.Log(hpPlayer);
+        }   
+    }
+
+    void Invulnerability()
+	{
+        isInvulnerability = false;
     }
 
     private void OnDrawGizmosSelected()

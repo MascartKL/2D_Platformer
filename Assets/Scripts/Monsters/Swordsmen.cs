@@ -30,12 +30,16 @@ public class Swordsmen : Mob
         MobFlip();
         isLeftScale = true;
         player = GameObject.FindGameObjectWithTag("Player");
-    } 
+    }
 
 
-    
-    void Update()
+
+    protected override void Update()
     {
+        base.Update();
+        if (isStan)
+            return;
+
         transform.position = new Vector2(transform.position.x, Mathf.Clamp(gameObject.transform.position.y, groundLevel, groundLevel));
         distToPlayer = Vector2.Distance(player.transform.position, gameObject.transform.position);
 
@@ -112,6 +116,7 @@ public class Swordsmen : Mob
     {
         anim.SetBool("isAttack", true);
         isAttack = true;
+        _isAttack = true;
         Invoke("SwordAttack", 0.85f);
         Invoke("StopAttack", 1f);
         Invoke("CdAttack", 5f);   
@@ -136,6 +141,7 @@ public class Swordsmen : Mob
     }
     void SwordAttack()
     {
+        _isAttack = false;
         if (Physics2D.OverlapCircle(attackPos.position, attackRange, playerLayer) == true)
         {
             player.GetComponent<Player>().PlayerDamaged(mobDamage);
