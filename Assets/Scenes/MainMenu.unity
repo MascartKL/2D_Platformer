@@ -245,6 +245,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 63996519}
   m_CullTransparentMesh: 1
+--- !u!1 &69951966 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3300756559337124001, guid: b1bde3a64dba61743861a469a30af1ee, type: 3}
+  m_PrefabInstance: {fileID: 1175142815367947177}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &266699922
 GameObject:
   m_ObjectHideFlags: 0
@@ -1453,6 +1458,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1287461497}
   m_CullTransparentMesh: 1
+--- !u!1 &1297962925 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8237179110156528546, guid: b1bde3a64dba61743861a469a30af1ee, type: 3}
+  m_PrefabInstance: {fileID: 1175142815367947177}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &1388303290 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1371081401283683821, guid: 19818a7ab457e1a46b507c95704673bb, type: 3}
@@ -2015,13 +2025,37 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1388303293}
+    - target: {fileID: 1175142816509055920, guid: b1bde3a64dba61743861a469a30af1ee, type: 3}
+      propertyPath: m_Text
+      value: Use
+      objectReference: {fileID: 0}
     - target: {fileID: 1175142816896658679, guid: b1bde3a64dba61743861a469a30af1ee, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1388303293}
+    - target: {fileID: 1355170521295269528, guid: b1bde3a64dba61743861a469a30af1ee, type: 3}
+      propertyPath: m_RootOrder
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5055711269497617121, guid: b1bde3a64dba61743861a469a30af1ee, type: 3}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 5338648300211055791, guid: b1bde3a64dba61743861a469a30af1ee, type: 3}
       propertyPath: m_Name
       value: For Menu
+      objectReference: {fileID: 0}
+    - target: {fileID: 5969268086639874192, guid: b1bde3a64dba61743861a469a30af1ee, type: 3}
+      propertyPath: m_RootOrder
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6685079352231206653, guid: b1bde3a64dba61743861a469a30af1ee, type: 3}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9173947832594082173, guid: b1bde3a64dba61743861a469a30af1ee, type: 3}
+      propertyPath: m_RootOrder
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b1bde3a64dba61743861a469a30af1ee, type: 3}
@@ -2032,6 +2066,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 752019000}
     m_Modifications:
+    - target: {fileID: 489403807465532996, guid: 19818a7ab457e1a46b507c95704673bb, type: 3}
+      propertyPath: m_Type
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 489403807465532996, guid: 19818a7ab457e1a46b507c95704673bb, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 20a512fcbde6ff54ca76c77d7b1533e2, type: 3}
+    - target: {fileID: 489403807465532996, guid: 19818a7ab457e1a46b507c95704673bb, type: 3}
+      propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1308963771284480753, guid: 19818a7ab457e1a46b507c95704673bb, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -2070,6 +2116,18 @@ PrefabInstance:
       propertyPath: buttonsForMenu
       value: 
       objectReference: {fileID: 707181766}
+    - target: {fileID: 1371081401283683818, guid: 19818a7ab457e1a46b507c95704673bb, type: 3}
+      propertyPath: dopStat.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1371081401283683818, guid: 19818a7ab457e1a46b507c95704673bb, type: 3}
+      propertyPath: dopStat.Array.data[0]
+      value: 
+      objectReference: {fileID: 69951966}
+    - target: {fileID: 1371081401283683818, guid: 19818a7ab457e1a46b507c95704673bb, type: 3}
+      propertyPath: dopStat.Array.data[1]
+      value: 
+      objectReference: {fileID: 1297962925}
     - target: {fileID: 1371081401283683818, guid: 19818a7ab457e1a46b507c95704673bb, type: 3}
       propertyPath: slotsPlayer.Array.data[0]
       value: 

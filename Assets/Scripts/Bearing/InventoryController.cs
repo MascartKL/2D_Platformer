@@ -11,6 +11,7 @@ public class InventoryController : MonoBehaviour
     public Item item;
     public Sprite emptySprite;
     [SerializeField] private GameObject mainStat;
+    [SerializeField] private GameObject[] dopStat;
 
 
     [SerializeField] private Sprite[] imageType;
@@ -54,8 +55,11 @@ public class InventoryController : MonoBehaviour
     public GameObject buttonTake;
     public GameObject levelComplImg;
 
+    
+
     void Start()
     {
+       
         for (int i = 0; i < 10; i++)
         {
 
@@ -73,7 +77,11 @@ public class InventoryController : MonoBehaviour
         }
         Load();
 
-        if(SceneManager.GetActiveScene().buildIndex == 0)
+        StatsStart(playersItem);
+        Debug.Log("Base damage = " + Player.baseDamage + " ,Defence = " + Player.defence + "Health = " + Player.health + " ,  %Phys  = " + Player.procPhysDamage + ",   %Def = " + Player.procDef + ",  %Health = " + Player.procHealth + ",  Fire Dam = " + Player.fireDamage + ",  Cold Dam = " + Player.coldDamage + " , Cold Res = " + Player.coldRes + " , Fire Res = " + Player.fireRes);
+
+
+        if (SceneManager.GetActiveScene().buildIndex == 0)
         {
             buttonsForMenu.SetActive(true);
             buttonsForGame.SetActive(false);
@@ -127,7 +135,7 @@ public class InventoryController : MonoBehaviour
 
     void LevelEnd(int level)
     {
-        item.Constructor(Random.Range(1, 4), Random.Range(1, 4), "Attack", Random.Range(0, 1000));          // делегата
+        item.Constructor(Random.Range(1, 4), Random.Range(1, 4), Random.Range(0, 1000));          // делегата
         selectedItem = item;
         AddDataReward(item);       
     }
@@ -139,6 +147,8 @@ public class InventoryController : MonoBehaviour
 
     public void Save()
     {
+        Debug.Log(itemsSword.Count);
+
         string pathSword = Application.streamingAssetsPath + "/SwordStashInfo.json";//"b:/Repo_g/2dplatform/Assets/SaveFiles/SwordStashInfo.json";
         string pathChest = Application.streamingAssetsPath + "/ChestStashInfo.json";//"b:/Repo_g/2dplatform/Assets/SaveFiles/ChestStashInfo.json";
         string pathHelmet = Application.streamingAssetsPath + "/HelmetStashInfo.json";//"b:/Repo_g/2dplatform/Assets/SaveFiles/HelmetStashInfo.json";
@@ -191,6 +201,8 @@ public class InventoryController : MonoBehaviour
         itemsHelmet = JsonConvert.DeserializeObject<List<Item>>(noteHelmet);
         playersItem = JsonConvert.DeserializeObject<List<Item>>(notePlayer);
 
+        //Debug.Log(itemsSword.Count);
+
         for (int i = 0; i < itemsSword.Count; i++)
         {
             AddData(itemsSword[i], false);                              
@@ -203,11 +215,24 @@ public class InventoryController : MonoBehaviour
         {
             AddData(itemsHelmet[i], false);
         }
-
-        for (int i = 0; i < 3; i++)
+        Debug.Log(playersItem.Count);
+        if (playersItem.Count == 0)
         {
-            AddDataPlayer(playersItem[i]);
+            for(int i =0; i <3; i++ )
+            {
+                item.Constructor(1, i + 1, 10);
+                playersItem.Add(item);
+                AddDataPlayer(item);
+            }
         }
+        else
+        { 
+            for (int i = 0; i < playersItem.Count; i++)
+            {
+                AddDataPlayer(playersItem[i]);
+            }
+        }
+        
 
     }
 
@@ -275,6 +300,10 @@ public class InventoryController : MonoBehaviour
     public void TestButton(GameObject go)
     {
         itemListImg.SetActive(true);
+        for(int i=0; i< dopStat.Length; i++)
+        {
+            dopStat[i].GetComponent<Text>().text = "";
+        }
 
         switch(go.transform.parent.name)
         {
@@ -284,6 +313,29 @@ public class InventoryController : MonoBehaviour
                     buttonsForGame.SetActive(false);
                     selectedItemIndex = slotsSword.IndexOf(go);
                     selectedItemType = 1;
+                    mainStat.GetComponent<Text>().text = itemsSword[selectedItemIndex].mainStatType.ToString() + "       " + itemsSword[selectedItemIndex].mainStatValue.ToString();
+                    for(int i=0; i< itemsSword[selectedItemIndex].dopStatType.Length; i++)
+                    {
+                        switch (itemsSword[selectedItemIndex].dopStatType[i])
+                        {
+                            case 1:
+                                {
+                                    dopStat[i].GetComponent<Text>().text ="%Attack       " + itemsSword[selectedItemIndex].dopStatValue[i].ToString();
+                                    break;
+                                }
+                            case 2:
+                                {
+                                    dopStat[i].GetComponent<Text>().text = "%Fire Damage       " + itemsSword[selectedItemIndex].dopStatValue[i].ToString();
+                                    break;
+                                }
+                            case 3:
+                                {
+                                    dopStat[i].GetComponent<Text>().text = "%Cold Damage       " + itemsSword[selectedItemIndex].dopStatValue[i].ToString();
+                                    break;
+                                }
+                        }
+                        
+                    }
                     break;
                 }
             case "Chests":
@@ -292,6 +344,28 @@ public class InventoryController : MonoBehaviour
                     buttonsForGame.SetActive(false);
                     selectedItemIndex = slotsChest.IndexOf(go);
                     selectedItemType = 2;
+                    mainStat.GetComponent<Text>().text = itemsChest[selectedItemIndex].mainStatType.ToString() + "       " + itemsChest[selectedItemIndex].mainStatValue.ToString();
+                    for (int i = 0; i < itemsChest[selectedItemIndex].dopStatType.Length; i++)
+                    {
+                        switch (itemsChest[selectedItemIndex].dopStatType[i])
+                        {
+                            case 1:
+                                {
+                                    dopStat[i].GetComponent<Text>().text = "%Defence       " + itemsChest[selectedItemIndex].dopStatValue[i].ToString();
+                                    break;
+                                }
+                            case 2:
+                                {
+                                    dopStat[i].GetComponent<Text>().text = "%Fire Resistance       " + itemsChest[selectedItemIndex].dopStatValue[i].ToString();
+                                    break;
+                                }
+                            case 3:
+                                {
+                                    dopStat[i].GetComponent<Text>().text = "%Cold Resistance      " + itemsChest[selectedItemIndex].dopStatValue[i].ToString();
+                                    break;
+                                }
+                        }
+                    }
                     break;
                 }
             case "Helmets":
@@ -299,8 +373,31 @@ public class InventoryController : MonoBehaviour
                     buttonsForMenu.SetActive(true);
                     buttonsForGame.SetActive(false);
                     selectedItemIndex = slotsHelmet.IndexOf(go);
+                    mainStat.GetComponent<Text>().text = itemsHelmet[selectedItemIndex].mainStatType.ToString() + "       " + itemsHelmet[selectedItemIndex].mainStatValue.ToString();
                     selectedItemType = 3;
+                    for (int i = 0; i < itemsHelmet[selectedItemIndex].dopStatType.Length; i++)
+                    {
+                        switch (itemsHelmet[selectedItemIndex].dopStatType[i])
+                        {
+                            case 1:
+                                {
+                                    dopStat[i].GetComponent<Text>().text = "%Health       " + itemsHelmet[selectedItemIndex].dopStatValue[i].ToString();
+                                    break;
+                                }
+                            case 2:
+                                {
+                                    dopStat[i].GetComponent<Text>().text = "%Fire Resistance       " + itemsHelmet[selectedItemIndex].dopStatValue[i].ToString();
+                                    break;
+                                }
+                            case 3:
+                                {
+                                    dopStat[i].GetComponent<Text>().text = "%Cold Resistance       " + itemsHelmet[selectedItemIndex].dopStatValue[i].ToString();
+                                    break;
+                                }
+                        }
+                    }
                     break;
+
                 }
             case "LevelComplete":
                 {
@@ -318,11 +415,11 @@ public class InventoryController : MonoBehaviour
                 }
 
         }
-        Debug.Log("selectedItemIndex   " + selectedItemIndex);
+       // Debug.Log("selectedItemIndex   " + selectedItemIndex);
 
         itemListImg.transform.Find("Icon").gameObject.GetComponent<Image>().sprite = go.transform.Find("Icon").gameObject.GetComponent<Image>().sprite;
         itemListImg.transform.Find("Icon_back").gameObject.GetComponent<Image>().color = go.GetComponent<Image>().color;
-        mainStat.GetComponent<Text>().text = item.mainStatType.ToString() +"       " + item.mainStatValue.ToString();
+      //  mainStat.GetComponent<Text>().text = item.mainStatType.ToString() +"       " + item.mainStatValue.ToString();
 
 
     }
@@ -330,7 +427,7 @@ public class InventoryController : MonoBehaviour
     public void AddButton()
     {
 
-        item.Constructor(Random.Range(1, 4), Random.Range(1,4), "Attack", Random.Range(0, 1000));
+        item.Constructor(Random.Range(1, 4), Random.Range(1,4), Random.Range(0, 1000));
         AddData(item, true);
     }
 
@@ -354,7 +451,8 @@ public class InventoryController : MonoBehaviour
                     if (isBusySlotPlayer[0] == false)
                     {
 
-                        Player.baseDamage += playersItem[0].mainStatValue;
+                        // Player.baseDamage += playersItem[0].mainStatValue;
+                        AddStatsItem(playersItem[0]);
                         itemsSword.RemoveAt(selectedItemIndex);
                         slotsSwordBusy[selectedItemIndex] = false;
                         slotsSword[selectedItemIndex].transform.Find("Icon").gameObject.GetComponent<Image>().sprite = emptySprite;
@@ -362,12 +460,14 @@ public class InventoryController : MonoBehaviour
                     }
                     else
                     {
+                        AddStatsItem(playersItem[0], tmpItem);
                         Player.baseDamage = Player.baseDamage - tmpItem.mainStatValue + itemsSword[selectedItemIndex].mainStatValue;
                         itemsSword[selectedItemIndex] = tmpItem;
                         slotsSword[selectedItemIndex].transform.Find("Icon").gameObject.GetComponent<Image>().sprite = tmpSprite;
                         slotsSword[selectedItemIndex].GetComponent<Image>().color = tmpColor;
                     }
                    
+
                     isBusySlotPlayer[0] = true;
                     
                     Debug.Log(Player.baseDamage + "после");
@@ -478,7 +578,7 @@ public class InventoryController : MonoBehaviour
 
     private void AddData(Item it, bool addInList)
     {
-        Debug.Log(itemsSword.Count);    // если не вызвать количество элементов, он будет выкидывать Null reference на  if (itemsSword.Count < 10)
+        //Debug.Log(itemsSword.Count);    // если не вызвать количество элементов, он будет выкидывать Null reference на  if (itemsSword.Count < 10)
         switch (it.itemType)
         {
             case 1:
@@ -491,7 +591,7 @@ public class InventoryController : MonoBehaviour
                         }
                         slotsSword[itemsSword.IndexOf(it)].transform.Find("Icon").gameObject.GetComponent<Image>().sprite = imageType[0];
                         slotsSwordBusy[itemsSword.IndexOf(it)] = true;
-                        Debug.Log(itemsSword.IndexOf(it));
+                       // Debug.Log(itemsSword.IndexOf(it));
                         SetColorRarity(it, slotsSword, itemsSword);
                     }
                     else
@@ -510,7 +610,7 @@ public class InventoryController : MonoBehaviour
                         }
                         slotsChest[itemsChest.IndexOf(it)].transform.Find("Icon").gameObject.GetComponent<Image>().sprite = imageType[1];
                         slotsChestBusy[itemsChest.IndexOf(it)] = true;
-                        Debug.Log(itemsChest.IndexOf(it));
+                       // Debug.Log(itemsChest.IndexOf(it));
                         SetColorRarity(it, slotsChest, itemsChest);
                     }
                     else
@@ -530,8 +630,8 @@ public class InventoryController : MonoBehaviour
                         }
                         slotsHelmet[itemsHelmet.IndexOf(it)].transform.Find("Icon").gameObject.GetComponent<Image>().sprite = imageType[2];
                         slotsHelmetBusy[itemsHelmet.IndexOf(it)] = true;
-                        Debug.Log(itemsHelmet.IndexOf(it));
-                        Debug.Log(slotsHelmetBusy[itemsHelmet.IndexOf(it)]);
+                       // Debug.Log(itemsHelmet.IndexOf(it));
+                        //Debug.Log(slotsHelmetBusy[itemsHelmet.IndexOf(it)]);
                         SetColorRarity(it, slotsHelmet, itemsHelmet);
                     }
                     else
@@ -598,6 +698,210 @@ public class InventoryController : MonoBehaviour
         }
     }
 
+    private void AddStatsItem( Item newItem, Item pastItem)
+    {
+        
+        switch(newItem.mainStatType)
+        {
+            case "Attack":
+                {                   
+                    Player.baseDamage = Player.baseDamage + newItem.mainStatValue - pastItem.mainStatValue;
+                    break;
+                }
+            case "Defence":
+                {
+                    Player.defence = Player.defence + newItem.mainStatValue - pastItem.mainStatValue;
+                    break;
+                }
+            case "Health":
+                {
+                    Player.health = Player.health + newItem.mainStatValue - pastItem.mainStatValue;
+                    break;
+                }
+
+        }
+        for(int i =0; i< newItem.dopStatType.Length; i++)
+        {
+            switch (newItem.dopStatTypeName[i])
+            {
+                case "%Phys Damage":
+                    {
+                        Player.procPhysDamage = Player.procPhysDamage + newItem.dopStatValue[i] - pastItem.dopStatValue[i];
+                        break;
+                    }
+                case "Fire Damage":
+                    {
+                        Player.fireDamage = Player.fireDamage + newItem.dopStatValue[i] - pastItem.dopStatValue[i];
+                        break;
+                    }
+                case "Cold Damage":
+                    {
+                        Player.coldDamage = Player.coldDamage + newItem.dopStatValue[i] - pastItem.dopStatValue[i];
+                        break;
+                    }
+                case "%Defence":
+                    {
+                        Player.procDef = Player.procDef + newItem.dopStatValue[i] - pastItem.dopStatValue[i];
+                        break;
+                    }
+                case "Fire Resistance":
+                    {
+                        Player.fireRes = Player.fireRes + newItem.dopStatValue[i] - pastItem.dopStatValue[i];
+                        break;
+                    }
+                case "Cold Resistance":
+                    {
+                        Player.coldRes = Player.coldRes + newItem.dopStatValue[i] - pastItem.dopStatValue[i];
+                        break;
+                    }
+                case "%Health":
+                    {
+                        Player.procHealth = Player.procHealth + newItem.dopStatValue[i] - pastItem.dopStatValue[i];
+                        break;
+                    }
+
+            }
+        }
+        Debug.Log("Base damage = " + Player.baseDamage + " ,Defence = " + Player.defence + "Health = " + Player.health + " ,  %Phys  = " + Player.procPhysDamage + ",   %Def = " + Player.procDef + ",  %Health = " + Player.procHealth + ",  Fire Dam = " + Player.fireDamage + ",  Cold Dam = " + Player.coldDamage + " , Cold Res = " + Player.coldRes + " , Fire Res = " + Player.fireRes);
+    }
+
+    private void AddStatsItem(Item newItem)
+    {
+        switch (newItem.mainStatType)
+        {
+            case "Attack":
+                {
+                    Player.baseDamage += newItem.mainStatValue;
+                    break;
+                }
+            case "Defence":
+                {
+                    Player.defence +=  newItem.mainStatValue;
+                    break;
+                }
+            case "Health":
+                {
+                    Player.health +=  newItem.mainStatValue;
+                    break;
+                }
+        }
+
+        for (int i = 0; i < newItem.dopStatType.Length; i++)
+        {
+            switch (newItem.dopStatTypeName[i])
+            {
+                case "%Phys Damage":
+                    {
+                        Player.procPhysDamage +=newItem.dopStatValue[i];
+                        break;
+                    }
+                case "Fire Damage":
+                    {
+                        Player.fireDamage +=newItem.dopStatValue[i];
+                        break;
+                    }
+                case "Cold Damage":
+                    {
+                        Player.coldDamage += newItem.dopStatValue[i];
+                        break;
+                    }
+                case "%Defence":
+                    {
+                        Player.procDef += newItem.dopStatValue[i];
+                        break;
+                    }
+                case "Fire Resistance":
+                    {
+                        Player.fireRes += newItem.dopStatValue[i];
+                        break;
+                    }
+                case "Cold Resistance":
+                    {
+                        Player.coldRes += newItem.dopStatValue[i];
+                        break;
+                    }
+                case "%Health":
+                    {
+                        Player.procHealth += newItem.dopStatValue[i];
+                        break;
+                    }
+
+            }
+        }
+        Debug.Log("Base damage = " + Player.baseDamage + " ,Defence = " + Player.defence + "Health = " + Player.health + " ,  %Phys  = " + Player.procPhysDamage + ",   %Def = " + Player.procDef + ",  %Health = " + Player.procHealth + ",  Fire Dam = " + Player.fireDamage + ",  Cold Dam = " + Player.coldDamage + " , Cold Res = " + Player.coldRes + " , Fire Res = " + Player.fireRes);
+    }
+    private void StatsStart(List<Item> playerItems)
+    {
+        Debug.Log("playerItems.Count   " + playerItems.Count);
+        for(int i =0; i < playerItems.Count; i++ )
+        {
+            Debug.Log(playerItems[i].mainStatType);
+            switch(playerItems[i].mainStatType)
+            {
+                case "Attack":
+                    {
+                        Player.baseDamage += playerItems[i].mainStatValue;
+                        Debug.Log("test attack");
+                        break;
+                    }
+                case "Defence":
+                    {
+                        Player.defence += playerItems[i].mainStatValue;
+                        break;
+                    }
+                case "Health":
+                    {
+                        Player.health += playerItems[i].mainStatValue;
+                        break;
+                    }
+            }
+            for (int k = 0; k < playerItems[i].dopStatTypeName.Length; k++)
+            {
+                switch (playerItems[i].dopStatTypeName[k])
+                {
+                    case "%Phys Damage":
+                        {
+                            Player.procPhysDamage += playerItems[i].dopStatValue[k];
+                            break;
+                        }
+                    case "Fire Damage":
+                        {
+                            Player.fireDamage += playerItems[i].dopStatValue[k];
+                            break;
+                        }
+                    case "Cold Damage":
+                        {
+                            Player.coldDamage += playerItems[i].dopStatValue[k];
+                            break;
+                        }
+                    case "%Defence":
+                        {
+                            Player.procDef += playerItems[i].dopStatValue[k];
+                            break;
+                        }
+                    case "Fire Resistance":
+                        {
+                            Player.fireRes += playerItems[i].dopStatValue[k];
+                            break;
+                        }
+                    case "Cold Resistance":
+                        {
+                            Player.coldRes += playerItems[i].dopStatValue[k];
+                            break;
+                        }
+                    case "%Health":
+                        {
+                            Player.procHealth += playerItems[i].dopStatValue[k];
+                            break;
+                        }
+                }
+            }
+        }
+        Debug.Log("Base damage = " + Player.baseDamage + " ,Defence = " + Player.defence + "Health = " + Player.health + " ,  %Phys  = " + Player.procPhysDamage + ",   %Def = " + Player.procDef + ",  %Health = " + Player.procHealth + ",  Fire Dam = " + Player.fireDamage + ",  Cold Dam = " + Player.coldDamage + " , Cold Res = " + Player.coldRes + " , Fire Res = " + Player.fireRes);
+
+
+    }
+
     private void Refresh()
     {
         for (int i = 0; i < 9; i++)
@@ -617,7 +921,7 @@ public class InventoryController : MonoBehaviour
                             slotsSwordBusy[i] = true;
                             slotsSwordBusy[i + 1] = false;
 
-                            Debug.Log("swap");
+                            //Debug.Log("swap");
                             
                         }
                         break;
@@ -635,7 +939,7 @@ public class InventoryController : MonoBehaviour
                             slotsChestBusy[i] = true;
                             slotsChestBusy[i + 1] = false;
 
-                            Debug.Log("swap");
+                           // Debug.Log("swap");
                         }
                         break;
                     }
@@ -652,7 +956,7 @@ public class InventoryController : MonoBehaviour
                             slotsHelmetBusy[i] = true;
                             slotsHelmetBusy[i + 1] = false;
 
-                            Debug.Log("swap");
+                          //  Debug.Log("swap");
                         }
                         break;
                     }
@@ -693,13 +997,158 @@ public struct Item
     public string mainStatType;
     public int mainStatValue;
     private GameObject go;
+    public int[] dopStatType;
+    public string[] dopStatTypeName;
+    public int[] dopStatValue;
 
-    public void Constructor(int rarity, int type, string mainS,int mainSValue)
+    public void Constructor(int rarity, int type,int mainSValue)
     {
         itemRarity = rarity;
         itemType = type;
-        mainStatType = mainS;
-        mainStatValue = mainSValue;       
+        mainStatValue = mainSValue;    
+        switch(itemType)
+        {
+            case 1:
+                {
+                    mainStatType = "Attack";
+                  
+                    break;
+                }
+            case 2:
+                {
+                    mainStatType = "Defence";
+                    break;
+                }
+            case 3:
+                {
+                    mainStatType = "Health";
+                    break;
+                }
+        }
+        switch (itemRarity)
+        {
+            case 1:
+                {
+                    dopStatType = new int[0];
+                    dopStatValue = new int[0];
+                    dopStatTypeName = new string[0];
+                    break;
+                }
+            case 2:
+                {
+                    dopStatType = new int[1];
+                    dopStatValue = new int[1];
+                    dopStatTypeName = new string[1];
+                    dopStatType[0] = Random.Range(1, 4);
+                    break;
+                }
+            case 3:
+                {
+
+                    dopStatType = new int[2];
+                    dopStatValue = new int[2];
+                    dopStatTypeName = new string[2];
+                    dopStatType[0] = Random.Range(1, 4);
+                    dopStatType[1] = Random.Range(1, 4);
+                    while (dopStatType[1] == dopStatType[0])
+                    {
+                        dopStatType[1] = Random.Range(1, 4);
+                    }
+                    break;
+                }
+        }
+        RollStat();
+        
     }
 
+    public void RollStat()
+    {
+        switch(mainStatType)
+        {
+            case "Attack":
+                {
+                    for(int i=0; i < dopStatType.Length; i++)
+                    {
+                        switch(dopStatType[i])
+                        {
+                            case 1:// % phys damage
+                                {
+                                    dopStatTypeName[i] = "%Phys Damage";
+                                    dopStatValue[i] = Random.Range(1, 8);
+                                    break;
+                                }
+                            case 2: // fire damage
+                                {
+                                    dopStatTypeName[i] = "Fire Damage";
+                                    dopStatValue[i] = Random.Range(10, 100);
+                                    break;
+                                }
+                            case 3: // cold d
+                                {
+                                    dopStatTypeName[i] = "Cold Damage";
+                                    dopStatValue[i] = Random.Range(10, 100);
+                                    break;
+                                }
+                        }
+                    }
+                    break;
+                }
+            case "Defence":
+                {
+                    for (int i = 0; i < dopStatType.Length; i++)
+                    {
+                        switch (dopStatType[i])
+                        {
+                            case 1: // % def
+                                {
+                                    dopStatTypeName[i] = "%Defence";
+                                    dopStatValue[i] = Random.Range(1, 8);
+                                    break;
+                                }
+                            case 2: // % fire res
+                                {
+                                    dopStatTypeName[i] = "Fire Resistance";
+                                    dopStatValue[i] = Random.Range(5, 20);
+                                    break;
+                                }
+                            case 3: // % cold res
+                                {
+                                    dopStatTypeName[i] = "Cold Resistance";
+                                    dopStatValue[i] = Random.Range(5, 20);
+                                    break;
+                                }
+                        }
+                    }
+                    break;
+                }
+            case "Health":
+                {
+                    for (int i = 0; i < dopStatType.Length; i++)
+                    {
+                        switch (dopStatType[i])
+                        {
+                            case 1: // % health
+                                {
+                                    dopStatTypeName[i] = "Health";
+                                    dopStatValue[i] = Random.Range(1, 5);
+                                    break;
+                                }
+                            case 2: // % fire res
+                                {
+                                    dopStatTypeName[i] = "Fire Resistance";
+                                    dopStatValue[i] = Random.Range(5, 20);
+                                    break;
+                                }
+                            case 3: // % cold res
+                                {
+                                    dopStatTypeName[i] = "Cold Resistance";
+                                    dopStatValue[i] = Random.Range(5, 20);
+                                    break;
+                                }
+                        }
+                    }
+                    break;
+                }
+        }
+    }
 }
