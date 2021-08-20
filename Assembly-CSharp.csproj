@@ -57,25 +57,28 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Joystick Pack\Scripts\Joysticks\DynamicJoystick.cs" />
+    <Compile Include="Assets\Scripts\Monsters\Crossbowmen.cs" />
     <Compile Include="Assets\Joystick Pack\Scripts\Base\Joystick.cs" />
-    <Compile Include="Assets\Scripts\Monsters\Spike.cs" />
+    <Compile Include="Assets\Scripts\Traps\Spike.cs" />
     <Compile Include="Assets\Scripts\UI\CameraController.cs" />
     <Compile Include="Assets\Joystick Pack\Scripts\Joysticks\FixedJoystick.cs" />
     <Compile Include="Assets\Joystick Pack\Scripts\Joysticks\VariableJoystick.cs" />
     <Compile Include="Assets\Scripts\LevelController.cs" />
+    <Compile Include="Assets\Scripts\Monsters\Dragon.cs" />
     <Compile Include="Assets\Joystick Pack\Examples\JoystickSetterExample.cs" />
     <Compile Include="Assets\Scripts\Monsters\Swordsmen.cs" />
     <Compile Include="Assets\Scripts\Player\Player.cs" />
     <Compile Include="Assets\Joystick Pack\Scripts\Joysticks\FloatingJoystick.cs" />
+    <Compile Include="Assets\Scripts\Traps\Knobstick.cs" />
     <Compile Include="Assets\Joystick Pack\Examples\JoystickPlayerExample.cs" />
+    <Compile Include="Assets\Scripts\Monsters\FireElemental.cs" />
     <Compile Include="Assets\Scripts\Monsters\Archer.cs" />
     <Compile Include="Assets\Scripts\Monsters\Mob.cs" />
     <Compile Include="Assets\Scripts\UI\CameraSize.cs" />
-    <Compile Include="Assets\Scripts\UI\ShowController.cs" />
-    <Compile Include="Assets\Scripts\Monsters\Crossbowmen.cs" />
-    <Compile Include="Assets\Scripts\Monsters\Mage.cs" />
-    <Compile Include="Assets\Scripts\Monsters\Dragon.cs" />
     <Compile Include="Assets\Scripts\Monsters\Shieldmen.cs" />
+    <Compile Include="Assets\Scripts\UI\ShowController.cs" />
+    <Compile Include="Assets\Scripts\Traps\Trap.cs" />
+    <Compile Include="Assets\Scripts\Traps\FireTrap.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

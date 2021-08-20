@@ -20,35 +20,21 @@ namespace Assets.Scripts.Monsters
 			player = GameObject.FindGameObjectWithTag("Player");
 		}
 
-		void Update()
+		protected override void Update()
 		{
-			HpBarChange();
+			base.Update();
+			if (isStan)
+				return;
 
-			distanceToPlayer = Vector2.Distance(gameObject.transform.position, player.transform.position);
-			if (distanceToPlayer < distanceAgro)
-			{
-				if(distanceToPlayer < distanceAttack)
-				{
-					Attack();
-				}
-				else
-				{
-					Persuit();
-				}
-			}
-			else
-			{
-				rb.velocity = new Vector2(0, 0);
-			}
+			base.Сonduct();
 		}
 
 		protected override void Attack()
 		{
 			base.Attack();
 
-			rb.velocity = new Vector2(0, 0);
 			if (!activArrow)
-			{
+			{	
 				anim.SetBool("isAttack", true);
 				activArrow = true;
 				Invoke("StartAttack", reloadArrow);
@@ -72,18 +58,19 @@ namespace Assets.Scripts.Monsters
 
 		void StartAttack()
 		{
+			if (!isStan)
+			{
+				float tempVelocity = transform.position.x - player.transform.position.x;
+				currentlyArrow = Instantiate(arrowPrefab, new Vector3(transform.position.x, transform.position.y + 0.5f, 0), Quaternion.Euler(0, 0, 0));
 
-			float tempVelocity = transform.position.x - player.transform.position.x;
-			currentlyArrow = Instantiate(arrowPrefab, new Vector3(transform.position.x, transform.position.y + 0.5f, 0), Quaternion.Euler(0, 0, 0));
+				if (tempVelocity > 0)
+					currentlyArrow.GetComponent<Rigidbody2D>().AddForce(new Vector2(speedArrow * -1, speedArrow / 5));
 
-			if (tempVelocity > 0)
-				currentlyArrow.GetComponent<Rigidbody2D>().AddForce(new Vector2(speedArrow * -1, speedArrow / 5));
-
-			if (tempVelocity < 0)
-				currentlyArrow.GetComponent<Rigidbody2D>().AddForce(new Vector2(speedArrow, speedArrow / 5));
-
-			Reload();
-
+				if (tempVelocity < 0)
+					currentlyArrow.GetComponent<Rigidbody2D>().AddForce(new Vector2(speedArrow, speedArrow / 5));
+				_isAttack = false;
+				Reload();
+			}
 		}
 	}
 }

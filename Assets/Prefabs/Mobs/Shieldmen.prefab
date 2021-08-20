@@ -300,6 +300,9 @@ MonoBehaviour:
   speed: 2
   distanceAgro: 15
   distanceAttack: 4
+  timeStan: 5
+  isStan: 0
+  _isAttack: 0
   physRes: 1
   spelRes: 1
   hpBar: {fileID: 170318858946498875}

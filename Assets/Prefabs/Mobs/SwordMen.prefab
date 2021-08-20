@@ -342,16 +342,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f7218cf9349ffe4e8262bc141f3e6ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hp: 100
+  damage: 0
+  speed: 0
+  distanceAgro: 0
+  distanceAttack: 0
+  timeStan: 5
+  isStan: 0
+  _isAttack: 0
+  physRes: 20
+  spelRes: 0
   hpBar: {fileID: 7501337941323542179}
   hpBarEffect: {fileID: 7501337942045737970}
-  hp: 100
-  physRes: 20
-  attackPos: {fileID: 8393248004187010229}
-  attackRange: 1.1
+  hpSpeed: 0.002
+  valueDamage: {fileID: 0}
+  canvas: {fileID: 0}
   playerLayer:
     serializedVersion: 2
     m_Bits: 8192
-  player: {fileID: 370095517180242141, guid: 908313ca46f67ac46b308e86006a4c5b, type: 3}
+  attackPos: {fileID: 8393248004187010229}
+  attackRange: 1.1
   mobDamage: 10
   groundLevel: 1.3
   mobCanvas: {fileID: 7501337941447091075}

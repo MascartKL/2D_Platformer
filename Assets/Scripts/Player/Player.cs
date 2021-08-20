@@ -52,7 +52,7 @@ public class Player : MonoBehaviour
             for (int i = 0; i < enemies.Length; i++)
             {
                 if(Random.Range(1,3) == 2)
-				{
+				{      
                     enemies[i].GetComponent<Mob>().TakeDamage(attackDamage*2, true);
                 }
 				else

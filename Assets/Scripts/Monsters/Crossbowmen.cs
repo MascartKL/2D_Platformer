@@ -20,37 +20,22 @@ namespace Assets.Scripts.Monsters
 			player = GameObject.FindGameObjectWithTag("Player");
 		}
 
-		void Update()
+		protected override void Update()
 		{
-			HpBarChange();
+			base.Update();
+			if (isStan)
+				return;
 
-			distanceToPlayer = Vector2.Distance(gameObject.transform.position, player.transform.position);
-			if (distanceToPlayer < distanceAgro)
-			{
-				if (distanceToPlayer < distanceAttack)
-				{
-					Attack();
-				}
-				else
-				{
-					Persuit();
-				}
-			}
-			else
-			{
-				rb.velocity = new Vector2(0, 0);
-			}
+			base.Сonduct();
 		}
 
 		protected override void Attack()
 		{
 			base.Attack();
 
-			rb.velocity = new Vector2(0, 0);
 
 			if (!activBolt)
 			{
-				//anim.SetBool("isAttack", true);
 				activBolt = true;
 				Invoke("StartAttack", reloadBolt);
 			}
@@ -67,24 +52,24 @@ namespace Assets.Scripts.Monsters
 
 		void Reload()
 		{
-			//anim.SetBool("isAttack", false);
 			activBolt = false;
 		}
 
 		void StartAttack()
 		{
+			if (!isStan)
+			{
+				float tempVelocity = transform.position.x - player.transform.position.x;
+				currentlyBolt = Instantiate(boltPrefab, new Vector3(transform.position.x, transform.position.y + 0.5f, 0), Quaternion.identity);
 
-			float tempVelocity = transform.position.x - player.transform.position.x;
-			currentlyBolt = Instantiate(boltPrefab, new Vector3(transform.position.x, transform.position.y + 0.5f, 0), Quaternion.identity);
+				if (tempVelocity > 0)
+					currentlyBolt.GetComponent<Rigidbody2D>().AddForce(new Vector2(speedBolt * -1, 0));
 
-			if (tempVelocity > 0)
-				currentlyBolt.GetComponent<Rigidbody2D>().AddForce(new Vector2(speedBolt * -1, 0));
-
-			if (tempVelocity < 0)
-				currentlyBolt.GetComponent<Rigidbody2D>().AddForce(new Vector2(speedBolt, 0));
-
-			Reload();
-
+				if (tempVelocity < 0)
+					currentlyBolt.GetComponent<Rigidbody2D>().AddForce(new Vector2(speedBolt, 0));
+				_isAttack = false;
+				Reload();
+			}
 		}
 	}
 }
