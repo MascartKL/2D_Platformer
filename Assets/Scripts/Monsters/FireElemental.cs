@@ -49,7 +49,6 @@ namespace Assets.Scripts.Monsters
 				if (distanceToPlayer < distanceAttack)
 				{
 					base.Attack();
-					Debug.Log(startAttack);
 					if (startAttack)
 					{
 						if (Random.Range(1, 3) == 1)
@@ -95,6 +94,7 @@ namespace Assets.Scripts.Monsters
 			{
 				if (activSphere)
 				{
+					anim.SetBool("isSphere", false);
 					float tempVelocity = transform.position.x - player.transform.position.x;
 					currentlySphere = Instantiate(spherePrefab, new Vector3(transform.position.x, transform.position.y + 0.5f, 0), Quaternion.identity);
 
@@ -110,16 +110,17 @@ namespace Assets.Scripts.Monsters
 
 				if (activSpell)
 				{
-					if (Mathf.Abs(player.transform.position.y - gameObject.transform.position.y) < 0.5f)
-					{
+					anim.SetBool("isWall", false);
+					//if (Mathf.Abs(player.transform.position.y - gameObject.transform.position.y) < 0.5f)
+					//{
 						currentlySpell = Instantiate(aoeSpellPrefab,
 						new Vector3(player.transform.position.x, player.transform.position.y - player.transform.localScale.y / 3, 0),
 						Quaternion.identity);
-					}
-					else
-					{
-						activSpell = false;
-					}
+					//}
+					//else
+					//{
+					//	activSpell = false;
+					//}
 
 					_isAttack = false;
 					Invoke("Reload", timeAoe);
@@ -133,6 +134,7 @@ namespace Assets.Scripts.Monsters
 
 			if (!activSpell)
 			{
+				anim.SetBool("isWall", true);
 				activSpell = true;
 				Invoke("StartAttack", reloadAoe);
 			}
@@ -141,9 +143,10 @@ namespace Assets.Scripts.Monsters
 		protected override void Attack()
 		{
 			startAttack = false;
-
+			
 			if (!activSphere)
 			{
+				anim.SetBool("isSphere", true);
 				activSphere = true;
 				Invoke("StartAttack", reload);
 			}

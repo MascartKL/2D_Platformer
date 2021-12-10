@@ -59,6 +59,7 @@
     <Compile Include="Assets\Joystick Pack\Scripts\Joysticks\DynamicJoystick.cs" />
     <Compile Include="Assets\Scripts\Monsters\Crossbowmen.cs" />
     <Compile Include="Assets\Joystick Pack\Scripts\Base\Joystick.cs" />
+    <Compile Include="Assets\Scripts\Monsters\Kemal.cs" />
     <Compile Include="Assets\Scripts\Traps\Spike.cs" />
     <Compile Include="Assets\Scripts\UI\CameraController.cs" />
     <Compile Include="Assets\Joystick Pack\Scripts\Joysticks\FixedJoystick.cs" />
@@ -69,6 +70,7 @@
     <Compile Include="Assets\Scripts\Monsters\Swordsmen.cs" />
     <Compile Include="Assets\Scripts\Player\Player.cs" />
     <Compile Include="Assets\Joystick Pack\Scripts\Joysticks\FloatingJoystick.cs" />
+    <Compile Include="Assets\Scripts\Traps\FireTrap.cs" />
     <Compile Include="Assets\Scripts\Traps\Knobstick.cs" />
     <Compile Include="Assets\Joystick Pack\Examples\JoystickPlayerExample.cs" />
     <Compile Include="Assets\Scripts\Monsters\FireElemental.cs" />
@@ -78,7 +80,7 @@
     <Compile Include="Assets\Scripts\Monsters\Shieldmen.cs" />
     <Compile Include="Assets\Scripts\UI\ShowController.cs" />
     <Compile Include="Assets\Scripts\Traps\Trap.cs" />
-    <Compile Include="Assets\Scripts\Traps\FireTrap.cs" />
+    <Compile Include="Assets\Scripts\Monsters\IceElemental.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

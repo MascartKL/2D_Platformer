@@ -14,6 +14,7 @@ public class Player : MonoBehaviour
     public LayerMask whatisGround;
     public Joystick joystick;
     private bool isInvulnerability;
+    public bool isStan;
 
     [Header("Main Settings")]
     [SerializeField]
@@ -90,6 +91,10 @@ public class Player : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (isStan)
+        {
+            return;
+        }
 #if UNITY_EDITOR_WIN
         moveInput = Input.GetAxis("Horizontal");
 #endif
@@ -111,6 +116,12 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
+        if (isStan)
+		{
+            Debug.Log("Staaaaan(");
+            return;
+        }
+
         isGrounded = Physics2D.OverlapCircle(feetPos.position, checkRadius, whatisGround);
 #if UNITY_EDITOR_WIN
         if (isGrounded == true && Input.GetKeyDown(KeyCode.Space))

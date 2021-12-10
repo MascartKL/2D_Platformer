@@ -35,6 +35,8 @@ public class Mob : MonoBehaviour
     [Header("Player info")]
     protected GameObject player;
     protected float distanceToPlayer;
+    protected Player _player;
+    protected float timeStanPlayer = 1f;
     [SerializeField] protected LayerMask playerLayer;
 
     public delegate void DeathDelegate(GameObject go);
@@ -186,4 +188,18 @@ public class Mob : MonoBehaviour
 	{
         isStan = false;
     }
+
+    protected void StanPlayer()
+	{
+        if(Random.Range(1,3) == 1)
+		{
+            _player.isStan = true;
+            Invoke("ResetStanPlayer", timeStanPlayer);
+        }
+    }
+
+   private void ResetStanPlayer()
+   {
+        _player.isStan = false;
+   }
 }
